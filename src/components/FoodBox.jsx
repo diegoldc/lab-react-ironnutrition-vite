@@ -1,30 +1,38 @@
-function FoodBox({ food, handleDelete }) {
-  return (
-    <div className="list">
-      <ul>
-        {food.map((eachFood, index) => {
-          return (
-            <li className="card" key={index}>
-              <p>{eachFood.name}</p>
+import { Card, Col, Button } from "antd";
 
-              <img className="logo" src={eachFood.image} />
+function FoodBox({ food, handleDelete, searchValue }) {
+  return (
+    
+      <Col style={{display:"flex", flexWrap:"wrap"}}>
+        {food.length === 0 ? (
+          <p>No hay nada</p>
+        ) : (
+          food.filter((eachFood) => {
+            return eachFood.name.toLowerCase().includes(searchValue)
+          })        
+        .map((eachFood, index) => {
+
+          const totalCalorias = eachFood.servings * eachFood.calories
+
+          return (
+            <Card  title={eachFood.name} style={{ width: 230, height: 300, margin: 10 }} key={index}>
+              <img src={eachFood.image} height={60} alt="food"  />
 
               <p>Calories: {eachFood.calories}</p>
-              <p>Servings SERVINGS</p>
+              <p>Servings {eachFood.servings}</p>
 
               <p>
                 <b>
-                  Total Calories: {eachFood.servings} * {eachFood.calories}{" "}
+                  Total Calories: {totalCalorias}{" "}
                 </b>{" "}
                 kcal
               </p>
 
-              <button onClick={() => handleDelete(eachFood.id)}>Delete</button>
-            </li>
+              <Button type="primary" onClick={() => handleDelete(eachFood.id)}>Delete</Button>
+            </Card>
           );
-        })}
-      </ul>
-    </div>
+        }))}
+      </Col>
   );
 }
 
